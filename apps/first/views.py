@@ -1,45 +1,35 @@
-from rest_framework.generics import GenericAPIView
-from rest_framework.mixins import (CreateModelMixin, DestroyModelMixin,
-                                   ListModelMixin, RetrieveModelMixin,
-                                   UpdateModelMixin)
+from rest_framework.generics import GenericAPIView, ListCreateAPIView
+from rest_framework.mixins import (
+    CreateModelMixin,
+    DestroyModelMixin,
+    ListModelMixin,
+    RetrieveModelMixin,
+    UpdateModelMixin
+)
+from rest_framework.pagination import PageNumberPagination
 
-from apps.first.filter import carfilter
+from apps.first.filter import CarFilter
 from apps.first.models import Car
 from apps.first.serializers import CarSerializer
 
+from core.pagination import PagePagonation
 
-class CarlistCreateView(GenericAPIView, CreateModelMixin, ListModelMixin):
+
+class CarlistCreateView(ListCreateAPIView):
     serializer_class = CarSerializer
     queryset = Car.objects.all()
-
-
-    def get_queryset(self):
-        return carfilter(self.request.query_params)
-
-
-    def get(self, request, *args, **kwargs):
-
-        return super().list(request, *args, **kwargs)
+    filterset_class = CarFilter
 
 
 
-    def post(self, request, *args, **kwargs):
-        return super().create(request, *args, **kwargs)
+    # def get_queryset(self):
+    #     return carfilter(self.request.query_params)
 
 
-# def get (self,*args,**kwargs):
-    #     qs=Car.objects.all()
-    #     ser=CarSerializer(qs,many=True)
-    #     return Response(ser.data,status=status.HTTP_200_OK)
-    #
-    #
-    # def post(self,*args,**kwargs):
-    #     data=self.request.data
-    #     serializer=CarSerializer(data=data)
-    #     serializer.is_valid(raise_exception=True)
-    #     serializer.save()
-    #
-    #     return Response(serializer.data,status=status.HTTP_201_CREATED)
+
+
+
+
 
 
 

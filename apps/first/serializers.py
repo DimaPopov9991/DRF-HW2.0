@@ -1,22 +1,20 @@
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from apps.first.models import Car
 
 
-class CarSerializer(serializers.Serializer):
-    id = serializers.IntegerField(read_only=True)
-    brand=serializers.CharField(max_length=255)
-    price=serializers.IntegerField()
-    year=serializers.IntegerField()
+class CarSerializer(serializers.ModelSerializer):
+   class Meta:
+       model = Car
+       fields = ('id','brand','year','price','create_at','updated_at','body_type','auto_park')
 
-    def create(self, validated_data):
-        car=Car.objects.create(**validated_data)
-        return car
+   def validate(self, data):
+      if data['price']== data['year']:
+          raise ValidationError('Price cannot be the same')
 
-    def update(self, instance, validated_data):
-        for key, value in validated_data.items():
-            setattr(instance, key, value)
-            instance.save()
-            return instance
+
+      return data
+
 
 
