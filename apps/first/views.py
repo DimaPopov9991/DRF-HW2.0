@@ -20,28 +20,13 @@ class CarlistCreateView(ListCreateAPIView):
     queryset = Car.objects.all()
     filterset_class = CarFilter
 
-
-
     # def get_queryset(self):
     #     return carfilter(self.request.query_params)
 
 
-
-
-
-
-
-
-
-
-
-
-class CarRetrieveUpdateDestroyView(GenericAPIView,RetrieveModelMixin,UpdateModelMixin,DestroyModelMixin):
+class CarRetrieveUpdateDestroyView(GenericAPIView, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin):
     serializer_class = CarSerializer
     queryset = Car.objects.all()
-
-
-
 
     def get(self, request, *args, **kwargs):
         return super().retrieve(request, *args, **kwargs)
@@ -100,8 +85,3 @@ class CarRetrieveUpdateDestroyView(GenericAPIView,RetrieveModelMixin,UpdateModel
     #     #     return
     #     self.get_object().delete()
     #     return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-
-
-
