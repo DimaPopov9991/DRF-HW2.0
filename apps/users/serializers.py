@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.db.transaction import atomic
 
 from rest_framework import serializers
 
@@ -21,10 +22,12 @@ class UserSerializer(serializers.ModelSerializer):
         model = UserModel
         fields = ('id', 'email','password','is_active', 'is_staff', 'is_superuser', 'last_login', 'create_at', 'updated_at','profile')
         extra_kwargs = {"password": {'write_only': True}}
+    @atomic()
     def create(self, validated_data):
         profile=validated_data.pop('profile')
         user=UserModel.objects.create_user(**validated_data)
         ProfileModel.objects.create(**profile,user=user)
         return user
+
 
 

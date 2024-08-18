@@ -25,5 +25,6 @@ urlpatterns = [
     path('auto_park/<int:pk>/cars',AutoparkAddCarView.as_view(), name='auto_park'),
 
     path('users/',include('apps.users.urls')),
+    path('auth/', include('apps.auth.urls')),
 
 ]
