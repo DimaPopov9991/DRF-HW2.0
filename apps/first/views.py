@@ -6,7 +6,7 @@ from rest_framework.mixins import (
     RetrieveModelMixin,
     UpdateModelMixin
 )
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from apps.first.filter import CarFilter
 from apps.first.models import Car
@@ -19,7 +19,7 @@ class CarlistCreateView(ListCreateAPIView):
     serializer_class = CarSerializer
     queryset = Car.objects.all()
     filterset_class = CarFilter
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
 
     # def get_queryset(self):
     #     return carfilter(self.request.query_params)
@@ -28,6 +28,7 @@ class CarlistCreateView(ListCreateAPIView):
 class CarRetrieveUpdateDestroyView(GenericAPIView, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin):
     serializer_class = CarSerializer
     queryset = Car.objects.all()
+
 
 
     def get(self, request, *args, **kwargs):

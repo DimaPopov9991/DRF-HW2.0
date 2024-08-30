@@ -1,11 +1,14 @@
+from datetime import datetime
+
+from django.core import validators as V
 from django.db import models
 
 from apps.auto_parks.models import AutoParkModel
 from apps.first.choices.boody_type_choices import BodyTypeChoices
 from apps.first.managers import CarManager
+
 from core.models import BaseModel
-from django.core import validators as V
-from datetime import datetime
+
 
 # Create your models here.
 class Car(BaseModel):
@@ -18,7 +21,7 @@ class Car(BaseModel):
     body_type=models.CharField(max_length=9, choices=BodyTypeChoices.choices)
     auto_park=models.ForeignKey(AutoParkModel, on_delete=models.CASCADE, related_name='cars')
 
-    objects=CarManager()
+    objects= CarManager()
     
 
 
