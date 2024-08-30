@@ -1,55 +1,33 @@
-from rest_framework.generics import GenericAPIView
-from rest_framework.mixins import (CreateModelMixin, DestroyModelMixin,
-                                   ListModelMixin, RetrieveModelMixin,
-                                   UpdateModelMixin)
+from rest_framework.generics import GenericAPIView, ListCreateAPIView
+from rest_framework.mixins import (
+    CreateModelMixin,
+    DestroyModelMixin,
+    ListModelMixin,
+    RetrieveModelMixin,
+    UpdateModelMixin
+)
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
-from apps.first.filter import carfilter
+from apps.first.filter import CarFilter
 from apps.first.models import Car
 from apps.first.serializers import CarSerializer
 
+from core.pagination import PagePagonation
 
-class CarlistCreateView(GenericAPIView, CreateModelMixin, ListModelMixin):
+
+class CarlistCreateView(ListCreateAPIView):
     serializer_class = CarSerializer
     queryset = Car.objects.all()
+    filterset_class = CarFilter
+    permission_classes = (AllowAny,)
+
+    # def get_queryset(self):
+    #     return carfilter(self.request.query_params)
 
 
-    def get_queryset(self):
-        return carfilter(self.request.query_params)
-
-
-    def get(self, request, *args, **kwargs):
-
-        return super().list(request, *args, **kwargs)
-
-
-
-    def post(self, request, *args, **kwargs):
-        return super().create(request, *args, **kwargs)
-
-
-# def get (self,*args,**kwargs):
-    #     qs=Car.objects.all()
-    #     ser=CarSerializer(qs,many=True)
-    #     return Response(ser.data,status=status.HTTP_200_OK)
-    #
-    #
-    # def post(self,*args,**kwargs):
-    #     data=self.request.data
-    #     serializer=CarSerializer(data=data)
-    #     serializer.is_valid(raise_exception=True)
-    #     serializer.save()
-    #
-    #     return Response(serializer.data,status=status.HTTP_201_CREATED)
-
-
-
-
-
-
-class CarRetrieveUpdateDestroyView(GenericAPIView,RetrieveModelMixin,UpdateModelMixin,DestroyModelMixin):
+class CarRetrieveUpdateDestroyView(GenericAPIView, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin):
     serializer_class = CarSerializer
     queryset = Car.objects.all()
-
 
 
 
@@ -110,8 +88,3 @@ class CarRetrieveUpdateDestroyView(GenericAPIView,RetrieveModelMixin,UpdateModel
     #     #     return
     #     self.get_object().delete()
     #     return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-
-
-

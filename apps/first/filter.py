@@ -1,24 +1,11 @@
-from django.db.models import QuerySet
-from django.http import QueryDict
-from rest_framework.exceptions import ValidationError
+from django_filters import rest_framework as filters
 
-from apps.first.models import Car
+from apps.first.choices.boody_type_choices import BodyTypeChoices
 
 
-def carfilter(query:QueryDict)-> QuerySet:
-    qs=Car.objects.all()
-
-
-
-    for k,v in query.items():
-        match k:
-            case 'price_gt':
-                qs=qs.filter(price__gt=v)
-            case 'price_lt':
-                qs=qs.filter(price__lt=v)
-            case _:
-                raise ValidationError(f"Invalid value for {k}")
-    return qs
-
-
-
+class CarFilter(filters.FilterSet):
+    year_gtd = filters.NumberFilter(field_name='year', lookup_expr='gt')
+    year_range = filters.RangeFilter('year')
+    year_in = filters.BaseInFilter('year')
+    body = filters.ChoiceFilter('body', choices=BodyTypeChoices.choices)
+    order = filters.OrderingFilter(fields=('brand', 'price'))
